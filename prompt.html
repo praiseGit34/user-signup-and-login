@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button onclick="getAge()">getAge</button>
+
+    <p id="year"></p>
+
+    <script>
+    function getAge(){
+       let yearOfBirth=prompt("enter the year of birth") ;
+       let currentYear=new Date().getFullYear();
+       let age=currentYear-parseInt(yearOfBirth);
+       let category;
+       if(age<18){
+        category="minor";
+       }else if(age>=18&&age<=36){
+        category="youth";
+       }else{
+        category="elder";
+       }
+       document.getElementById('year').innerHTML="you are a "+category;
+    }
+    </script>
+</body>
+</html>
