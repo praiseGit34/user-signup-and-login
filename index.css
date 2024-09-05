@@ -14,3 +14,18 @@ input{
 input:hover{
     background-color: aquamarine;
 }
+.welcome{
+    display: flex;
+    justify-content: space-between;
+}
+.welcomesection,.formsection{
+    width:50%;
+    padding: 30px;
+}
+.welcomesection{
+    background-color:cornflowerblue;
+    align-items: center;
+    
+
+}
+
