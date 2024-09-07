@@ -13,67 +13,93 @@ let confirm = document.querySelector("#confirm-pass");
 let profilePic = document.querySelector("#picture");
 let signUpButton = document.querySelector("button");
 
+// Create a function to clear the form
+function clearForm() {
+  username.value = "";
+  firstname.value = "";
+  lastname.value = "";
+  email.value = "";
+  password.value = "";
+  confirm.value = "";
+  profilePic.value = "";
+}
+
+// Function to display errors below the input field
+function showError(input, message) {
+  let error = input.nextElementSibling;
+  if (!error || error.tagName !== 'DIV') {
+    error = document.createElement('div');
+    error.style.color = 'red';
+    input.parentNode.insertBefore(error, input.nextSibling);
+  }
+  error.textContent = message;
+}
+
 function validate(input) {
-  // length, characters (type text) = min=5
-  // console.dir(input)
-
   if (input.type === "text") {
-    // console.log("Text field", input.value)
-
     if (input.value.length >= 5) {
-      console.log(`${input.id} is valid.Thank you`);
+      showError(input, ""); // Clear previous error
       return true;
     } else {
-      console.error("Should have a min length of 5 characters");
+      showError(input, "Should have a min length of 5 characters");
       return false;
     }
   } else if (input.type === "email") {
-    // console.log("Email Field", input.value);
     let pattern = /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;
     if (pattern.test(input.value)) {
-      console.log("Email is valid");
+      showError(input, "");
       return true;
     } else {
-      console.error("Email format is invalid, it should be something lik test@email.com");
+      showError(input, "Email format is invalid, it should be something like test@email.com");
       return false;
     }
   } else if (input.type === "password") {
-    // console.log("Password field", input.value)
-
-    if (input.value === confirm.value) {
-      console.log("Password Matches");
+    if (password.value === confirm.value) {
+      showError(input, "");
       return true;
     } else {
-      console.error("Confirm password is not equal to the password you entered");
+      showError(confirm, "Confirm password should match the password you entered before");
       return false;
     }
   } else if (input.type === "file") {
     if (input.files.length > 0) {
-      console.log("you have selected a profile picture");
+      showError(input, "");
       return true;
     } else {
-      console.error("no file has been selected");
+      showError(input, "No file has been selected");
       return false;
     }
   } else {
     console.log("Malformed Input Field");
+    return false;
   }
-
 }
 
 signUpButton.addEventListener("click", function (event) {
   event.preventDefault();
 
   const inputFields = [username, firstname, lastname, email, password, profilePic];
-  let formData = {
-    username: username.value,
-    firstname: firstname.value,
-    lastname: lastname.value,
-    email: email.value,
-    password: password.value,
-    confirm: confirm.value,
-    profilePic: profilePic.value,
+  let isValid = true;
+
+  // Validate each input field
+  inputFields.forEach((input) => {
+    if (!validate(input)) {
+      isValid = false;
+    }
+  });
+
+  if (isValid) {
+    // Store in localStorage
+    let formData = {
+      username: username.value,
+      firstname: firstname.value,
+      lastname: lastname.value,
+      email: email.value,
+      password: password.value,
+      profilePic: profilePic.value,
+    };
+    localStorage.setItem("userInfo", JSON.stringify(formData));
+    clearForm(); // Clear form fields
+    window.location.href = "./home.html"; // Redirect to home page
   }
-  localStorage.set("userInfo", JSON.stringify(formData));
-  console.log(formData);
 });
